@@ -21,19 +21,26 @@
         padding: 5px;
       }
     </style>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   </head>
   <body>
     <h1>Connexion</h1>
 
-    <div id="authForm">
+    <div id="auth">
       <div class="section">
         <label><span class="required">*</span> E-mail</label><br />
-        <input type="email" required placeholder="Saisissez votre e-mail" />
+        <input
+          type="email"
+          id="email"
+          required
+          placeholder="Saisissez votre e-mail"
+        />
       </div>
       <div class="section">
         <label><span class="required">*</span> Mot de passe</label><br />
         <input
           type="password"
+          id="password"
           required
           placeholder="Saisissez votre mot de passe"
         />
@@ -43,7 +50,7 @@
 
     <script>
       function validerConnexion() {
-        const form = document.getElementById("authForm");
+        const form = document.getElementById("auth");
         const inputs = form.querySelectorAll("input");
         let valid = true;
 
@@ -57,10 +64,29 @@
           }
         });
 
-        if (valid) {
-          // TODO: handle login
-          alert("Connexion réussie !");
-        }
+        if (!valid) return;
+
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+
+        console.log("Appel AJAX");
+        $.ajax({
+          url: "ActionServlet",
+          type: "POST",
+          data: {
+            todo: "authentification_eleve",
+            email: email,
+            mdp: password,
+          },
+          dataType: "json",
+        })
+          .done(function (response) {
+            console.log("Réponse reçue :", response);
+          })
+          .fail(function (error) {
+            console.error("Erreur AJAX :", error);
+            $("#liste-des-matieres").text("Erreur lors du chargement des matières.");
+          });
       }
     </script>
   </body>

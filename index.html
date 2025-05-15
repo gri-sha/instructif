@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inscript'IF</title>
+    <style>
+      body {
+        padding: 20px;
+      }
+      h1 {
+        margin-bottom: 20px;
+      }
+      .matiere-card {
+        border: 1px solid #ccc;
+        padding: 15px;
+        margin-bottom: 10px;
+      }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  </head>
+  <body>
+    <div><a href="/athentication.html">Se connecter</a></div>
+    <h1>Trouver le proffeseur parfait</h1>
+    <h2>Choisissez une matiere</h2>
+    <div id="liste-des-matieres"></div>
+    <script>
+      $(document).ready(function () {
+        console.log("Appel AJAX");
+        $.ajax({
+          url: "ActionServlet",
+          type: "GET",
+          data: { todo: "lister_matieres" },
+          dataType: "json",
+        })
+          .done(function (response) {
+            console.log("Réponse reçue :", response);
+
+            let listeMatieres = $("#liste-des-matieres");
+            listeMatieres.empty();
+
+            response.matieres.forEach(function (matiere) {
+              console.log(matiere.nom_matiere + " " + matiere.id);
+              listeMatieres.append(
+                "<div class='matiere-card'>" + matiere.nom_matiere + "</div>"
+              );
+            });
+          })
+          .fail(function (error) {
+            console.error("Erreur AJAX :", error);
+          });
+      });
+    </script>
+  </body>
+</html>
