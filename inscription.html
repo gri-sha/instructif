@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inscription</title>
+  <style>
+    .hidden {
+      display: none;
+    }
+    .section {
+      margin-bottom: 15px;
+    }
+    .required {
+      color: red;
+    }
+    .error label, .error input {
+      color: red;
+      border-color: red;
+    }
+    input {
+      border: 1px solid #ccc;
+      padding: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Inscription</h1>
+
+  <div id="step1">
+    <div class="section">
+      <label><span class="required">*</span> E-mail</label><br />
+      <input type="email" required placeholder="Saisissez votre e-mail" />
+    </div>
+    <div class="section">
+      <label><span class="required">*</span> Mot de passe</label><br />
+      <input type="password" required placeholder="Saisissez votre mot de passe" />
+    </div>
+    <div class="section">
+      <label><span class="required">*</span> Confirmation mot de passe</label><br />
+      <input type="password" required placeholder="Confirmez votre mot de passe" />
+    </div>
+    <button onclick="showNextStep()">Continuer</button>
+  </div>
+
+  <div id="step2" class="hidden">
+    <div class="section">
+      <label><span class="required">*</span> Prénom</label><br />
+      <input type="text" required placeholder="Votre prénom" />
+    </div>
+    <div class="section">
+      <label><span class="required">*</span> Nom</label><br />
+      <input type="text" required placeholder="Votre nom" />
+    </div>
+    <div class="section">
+      <label><span class="required">*</span> Date de naissance</label><br />
+      <input type="date" required />
+    </div>
+    <button onclick="showNextStep()">Continuer</button>
+  </div>
+
+  <div id="step3" class="hidden">
+    <div class="section">
+      <label><span class="required">*</span> Code Etablissement</label><br />
+      <input type="text" required placeholder="Code établissement" />
+    </div>
+    <div class="section">
+      <label><span class="required">*</span> Classe</label><br />
+      <input type="text" required placeholder="Classe" />
+    </div>
+    <button onclick="validerInscription()">Valider</button>
+  </div>
+
+  <script>
+    let currentStep = 1;
+
+    function showNextStep() {
+      const stepDiv = document.getElementById(`step${currentStep}`);
+      const inputs = stepDiv.querySelectorAll("input");
+      let allFilled = true;
+
+      inputs.forEach(input => {
+        const section = input.closest(".section");
+        if (!input.value.trim()) {
+          allFilled = false;
+          section.classList.add("error");
+        } else {
+          section.classList.remove("error");
+        }
+      });
+
+      if (allFilled) {
+        stepDiv.classList.add("hidden");
+        currentStep++;
+        document.getElementById(`step${currentStep}`).classList.remove("hidden");
+      }
+    }
+
+    function validerInscription() {
+      const stepDiv = document.getElementById(`step${currentStep}`);
+      const inputs = stepDiv.querySelectorAll("input");
+      let allFilled = true;
+
+      inputs.forEach(input => {
+        const section = input.closest(".section");
+        if (!input.value.trim()) {
+          allFilled = false;
+          section.classList.add("error");
+        } else {
+          section.classList.remove("error");
+        }
+      });
+
+      if (allFilled) {
+        // TODO: handle final submission
+        alert("Inscription validée !");
+      }
+    }
+  </script>
+</body>
+</html>

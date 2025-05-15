@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Connexion</title>
+    <style>
+      .section {
+        margin-bottom: 15px;
+      }
+      .required {
+        color: red;
+      }
+      .error label,
+      .error input {
+        color: red;
+        border-color: red;
+      }
+      input {
+        border: 1px solid #ccc;
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Connexion</h1>
+
+    <div id="authForm">
+      <div class="section">
+        <label><span class="required">*</span> E-mail</label><br />
+        <input type="email" required placeholder="Saisissez votre e-mail" />
+      </div>
+      <div class="section">
+        <label><span class="required">*</span> Mot de passe</label><br />
+        <input
+          type="password"
+          required
+          placeholder="Saisissez votre mot de passe"
+        />
+      </div>
+      <button onclick="validerConnexion()">Connexion</button>
+    </div>
+
+    <script>
+      function validerConnexion() {
+        const form = document.getElementById("authForm");
+        const inputs = form.querySelectorAll("input");
+        let valid = true;
+
+        inputs.forEach((input) => {
+          const section = input.closest(".section");
+          if (!input.value.trim()) {
+            section.classList.add("error");
+            valid = false;
+          } else {
+            section.classList.remove("error");
+          }
+        });
+
+        if (valid) {
+          // TODO: handle login
+          alert("Connexion réussie !");
+        }
+      }
+    </script>
+  </body>
+</html>
