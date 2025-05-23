@@ -64,6 +64,7 @@
 
     <script>
       $(document).ready(function () {
+        console.log("getting demands")
         $.ajax({
           url: "ActionServlet",
           type: "GET",
@@ -71,6 +72,7 @@
           dataType: "json",
         })
           .done(function (response) {
+            console.log("demands recieved")
             const container = $("#contenu-demande");
             container.empty();
 
@@ -86,7 +88,7 @@
               const classe = eleve.classe || "";
               const etablissement = eleve.etablissement || "";
 
-              const html = ```
+              const html = `
 <div class="soutien-info">
 <div class="section-titre">Matière :</div>
 ${matiere}
@@ -103,13 +105,14 @@ ${description}
 <div>${lien}</div>
 <button id="btn-valider" onclick="validerDemande">Valider la demande</button>
 </div>
-              ```;
+              `;
               container.append(html);
             } else {
               container.text("Aucune demande en cours.");
             }
           })
           .fail(function () {
+            console.log("demands are not recieved")
             $("#contenu-demande").text("Erreur lors du chargement.");
           });
       });

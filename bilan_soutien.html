@@ -38,7 +38,10 @@
         $.ajax({
           url: "ActionServlet",
           type: "POST",
-          data: { todo: "terminer_le_soutien", text: document.getElementById("bilan").value.trim() },
+          data: {
+            todo: "terminer_le_soutien",
+            text: document.getElementById("bilan").value.trim(),
+          },
           dataType: "json",
         })
           .done(function (res) {

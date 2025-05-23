@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Inscript'IF - Accueil Élève</title>
+    <title>Accueil Élève</title>
     <style>
       body {
         padding: 20px;
@@ -50,23 +50,33 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   </head>
   <body>
-    <button id="btn-mon-compte">Mon compte</button>
+    <button id="btn-mon-compte" onclick="gotoMyAccount()">Mon compte</button>
 
     <h1>Trouvez le professeur parfait !</h1>
     <h2>Choisissez une matière :</h2>
     <div id="liste-des-matieres"></div>
 
-    <button id="btn-continuer" disabled>Continuer</button>
+    <button id="btn-continuer" onclick="continuer()" disabled>Continuer</button>
 
     <script>
+      let nomMatiereSelectionnee = null;
+
+      function gotoMyAccount() {
+        console.log("display my account");
+        window.location = "compte_eleve.html";
+      }
+
+      function continuer() {
+        if (nomMatiereSelectionnee) {
+          console.log("Matière sélectionnée :", nomMatiereSelectionnee);
+          window.location =
+            "demande_soutien.html?nomMatiere=" +
+            encodeURIComponent(nomMatiereSelectionnee);
+        }
+      }
+
       $(document).ready(function () {
-        $("#btn-mon-compte").click(function () {
-          window.location = "compte_eleve.html";
-        });
-
-        let nomMatiereSelectionnee = null;
-
-        // Charger la liste des matières
+        console.log("getting courses")
         $.ajax({
           url: "ActionServlet",
           type: "GET",
@@ -94,15 +104,6 @@
           .fail(function () {
             alert("Erreur lors du chargement des matières.");
           });
-
-        $("#btn-continuer").click(function () {
-          if (nomMatiereSelectionnee) {
-            console.log("Matière sélectionnée :", nomMatiereSelectionnee);
-            window.location =
-              "demande_soutien.html?nomMatiere=" +
-              encodeURIComponent(nomMatiereSelectionnee);
-          }
-        });
       });
     </script>
   </body>
