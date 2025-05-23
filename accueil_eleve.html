@@ -76,7 +76,7 @@
       }
 
       $(document).ready(function () {
-        console.log("getting courses")
+        console.log("getting courses");
         $.ajax({
           url: "ActionServlet",
           type: "GET",
@@ -87,10 +87,24 @@
             let listeMatieres = $("#liste-des-matieres");
             listeMatieres.empty();
 
+            images = {
+              "Francais" : "static/fr.png",
+              "Physique Chimie": "static/phy-chem.png",
+              "Musique" : "static/music.png",
+              "Histoire-Geo": "static/his-geo.png",
+              "SVT" : "static/svt.png",
+              "Anglais" : "static/eng.png",
+              "Math" : "static/math.png",
+            };
+
             response.matieres.forEach(function (matiere) {
               let matiereDiv = $("<div>")
                 .addClass("matiere-card")
-                .text(matiere.nom)
+                .html(
+                  (images[matiere.nom]
+                    ? `<img src="${images[matiere.nom]}" alt="${matiere.nom}">`
+                    : "") + `<span>${matiere.nom}</span>`
+                )
                 .click(function () {
                   nomMatiereSelectionnee = matiere.nom;
                   $(".matiere-card").removeClass("selected");

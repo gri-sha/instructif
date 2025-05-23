@@ -1,11 +1,104 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
   <head>
-    <title>TODO supply a title</title>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Compte eleve</title>
+    <style>
+      body {
+        padding: 20px;
+        font-family: Arial, sans-serif;
+      }
+      #btn-mon-compte {
+        margin-bottom: 20px;
+        padding: 8px 15px;
+        cursor: pointer;
+      }
+      h1,
+      h2 {
+        margin-bottom: 10px;
+      }
+      .soutien-card {
+        border: 1px solid #ccc;
+        padding: 15px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        user-select: none;
+        border-radius: 5px;
+        transition: background-color 0.3s, border-color 0.3s;
+      }
+      .soutien-card.selected {
+        background-color: #007bff;
+        color: white;
+        border-color: #0056b3;
+      }
+      #btn-continuer {
+        margin-top: 20px;
+        padding: 10px 20px;
+        cursor: pointer;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+      }
+      #btn-continuer:disabled {
+        background-color: #aaa;
+        cursor: not-allowed;
+      }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   </head>
   <body>
-    <div>TODO write content</div>
+    <h1>Mon Compte</h1>
+    <div><span>Nom</span> <span>Prenom</span></div>
+
+    <h1>Historique de soutiens</h1>
+
+    <div id="liste-des-soutiens">
+      <div><span>Math</span> <span>19/02/2025</span></div>
+    </div>
+
+    <button id="btn-continuer" onclick="continuer()" disabled>Continuer</button>
+    <script>
+      function continuer(idSoutienSelectionnee) {
+        if (idSoutienSelectionnee) {
+          console.log("Soutien sélectionnée :", idSoutienSelectionnee);
+          window.location =
+            "mon_compte.html?idSoutien=" +
+            encodeURIComponent(idSoutienSelectionnee);
+        }
+      }
+
+      $(document).ready(function () {
+        console.log("getting past courses");
+        $.ajax({
+          url: "ActionServlet",
+          type: "GET",
+          data: { todo: "lister_soutiens" },
+          dataType: "json",
+        })
+          .done(function (response) {
+            let listeSoutiens = $("#liste-des-soutiens");
+            listeSoutiens.empty();
+
+            response.soutiens.forEach(function (soutien) {
+              let soutienDiv = $("<div>")
+                .addClass("soutien-card")
+                .html(
+                  `<span>${soutien.nom}</span> <span>${soutien.date}</span>`
+                )
+                .click(function () {
+                  continuer(soutien.id);
+                });
+
+              listeSoutiens.append(soutienDiv);
+            });
+          })
+          .fail(function () {
+            alert("Erreur lors du chargement des soutiens.");
+          });
+      });
+    </script>
   </body>
 </html>
