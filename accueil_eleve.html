@@ -18,6 +18,7 @@
       h2 {
         margin-bottom: 10px;
       }
+
       .matiere-card {
         border: 1px solid #ccc;
         padding: 15px;
@@ -26,6 +27,17 @@
         user-select: none;
         border-radius: 5px;
         transition: background-color 0.3s, border-color 0.3s;
+      }
+
+      .matiere-card img {
+        width: 60px;
+        height: 60px;
+        object-fit: contain;
+        margin-right: 15px;
+        flex-shrink: 0;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       }
       .matiere-card.selected {
         background-color: #007bff;
@@ -88,13 +100,14 @@
             listeMatieres.empty();
 
             images = {
-              "Francais" : "static/fr.png",
+              "Francais": "static/fr.png",
               "Physique Chimie": "static/phy-chem.png",
-              "Musique" : "static/music.png",
+              "Musique": "static/music.png",
               "Histoire-Geo": "static/his-geo.png",
-              "SVT" : "static/svt.png",
-              "Anglais" : "static/eng.png",
-              "Math" : "static/math.png",
+              "SVT": "static/svt.png",
+              "Anglais": "static/eng.png",
+              "Math": "static/math.png",
+              "Arabe": "static/arabe.png"
             };
 
             response.matieres.forEach(function (matiere) {
