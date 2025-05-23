@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Faire une demande</title>
+    <style>
+      .section {
+        margin-bottom: 15px;
+      }
+      textarea {
+        width: 100%;
+        height: 100px;
+        border: 1px solid #ccc;
+        padding: 5px;
+        resize: vertical;
+      }
+      input[type="text"] {
+        width: 100%;
+        padding: 5px;
+        border: 1px solid #ccc;
+      }
+      button {
+        margin-top: 10px;
+        padding: 8px 15px;
+      }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  </head>
+  <body>
+    <h1>Description du soutien</h1>
+
+    <div class="section">
+      <textarea
+        id="description"
+        placeholder="Décrivez ici votre demande"
+      ></textarea>
+    </div>
+
+    <button onclick="envoyerDemande()">Valider ma demande</button>
+
+    <div class="section">
+      <h3>Lien de la réunion</h3>
+      <input type="text" id="lien" readonly />
+    </div>
+
+    <div class="section">
+      <h3>Notes de la réunion</h3>
+      <textarea
+        id="notes"
+        placeholder="Notez cette intervention ici"
+      ></textarea>
+    </div>
+
+    <button onclick="validerNotes()">Valider</button>
+
+    <script>
+      let soutienId = null; // on récupère l'id du soutien créé
+      let urlParams = new URLSearchParams(window.location.search);
+      let nomMatiere = urlParams.get("nomMatiere");
+
+      function envoyerDemande() {
+        const description = $("#description").val().trim();
+        if (!description) {
+          alert("Merci de décrire votre demande.");
+          return;
+        }
+        console.log("nomMatiere transmis :", nomMatiere);
+
+        $.ajax({
+          url: "ActionServlet",
+          type: "POST",
+          data: {
+            todo: "faire_demande",
+            description: description,
+            nomMatiere: nomMatiere,
+          },
+          dataType: "json",
+        })
+          .done(function (response) {
+            if (response.soutien) {
+              $("#lien").val(response.soutien.lien);
+              soutienId = response.soutien.id;
+              console.log("Demande créée !");
+            } else {
+              alert("Erreur lors de la création de la demande.");
+            }
+          })
+          .fail(function () {
+            alert("Erreur serveur.");
+          });
+      }
+
+      function validerNotes() {
+        const notes = $("#notes").val().trim();
+        if (!soutienId) {
+          alert("Veuillez d'abord valider la demande.");
+          return;
+        }
+
+        $.ajax({
+          url: "ActionServlet",
+          type: "POST",
+          data: {
+            todo: "noter_soutien",
+            idSoutien: soutienId,
+            notes: notes,
+          },
+          dataType: "json",
+        })
+          .done(function (response) {
+            window.location = "accueil_eleve.html";
+          })
+          .fail(function () {
+            alert("Erreur lors de l'enregistrement des notes.");
+          });
+      }
+    </script>
+  </body>
+</html>

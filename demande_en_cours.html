@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demande en cours</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+
+      h1 {
+        margin-bottom: 20px;
+      }
+
+      .soutien-info {
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        padding: 15px;
+        border-radius: 5px;
+      }
+
+      .section-titre {
+        font-weight: bold;
+        margin-top: 15px;
+        margin-bottom: 5px;
+      }
+
+      .profil-eleve {
+        margin-left: 20px;
+      }
+
+      #btn-valider,
+      #btn-retour {
+        margin-top: 20px;
+        padding: 10px 15px;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      #btn-valider {
+        background-color: #007bff;
+        color: white;
+      }
+
+      #btn-retour {
+        background-color: #6c757d;
+        color: white;
+        display: block;
+        margin-top: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Demande en cours</h1>
+    <div id="contenu-demande">Chargement en cours...</div>
+
+    <button id="btn-retour">Retour à l'accueil</button>
+
+    <script>
+      $(document).ready(function () {
+        $.ajax({
+          url: "ActionServlet",
+          type: "GET",
+          data: { todo: "recuperer_demande_en_cours" },
+          dataType: "json",
+        })
+          .done(function (response) {
+            const container = $("#contenu-demande");
+            container.empty();
+
+            const d = response.soutien;
+            if (d) {
+              const matiere = d.nom_matiere || "";
+              const description = d.description_demande || "";
+              const lien = d.lien || "";
+
+              const eleve = d.eleve || {};
+              const nom = eleve.nom || "";
+              const prenom = eleve.prenom || "";
+              const classe = eleve.classe || "";
+              const etablissement = eleve.etablissement || "";
+
+              const html = `
+            <div class="soutien-info">
+              <div class="section-titre">Matière :</div>
+              ${matiere}
+              <div class="section-titre">Description :</div>
+              ${description}
+              <div class="section-titre">Profil Élève :</div>
+              <div class="profil-eleve">
+                Nom : ${nom}<br>
+                Prénom : ${prenom}<br>
+                Classe : ${classe}<br>
+                Établissement : ${etablissement}
+              </div>
+              <div class="section-titre">Lien de la réunion :</div>
+              <div>${lien}</div>
+              <button id="btn-valider">Valider la demande</button>
+            </div>
+          `;
+
+              container.append(html);
+
+              $("#btn-valider").click(function () {
+                $.ajax({
+                  url: "ActionServlet",
+                  type: "POST",
+                  data: { todo: "valider_demande" },
+                  dataType: "json",
+                })
+                  .done(function (res) {
+                    if (res.status === "ok") {
+                      alert("Demande validée !");
+                      window.location.href = "bilan_soutien.html";
+                    } else {
+                      alert("Erreur lors de la validation.");
+                    }
+                  })
+                  .fail(function () {
+                    alert("Erreur serveur.");
+                  });
+              });
+            } else {
+              container.text("Aucune demande en cours.");
+            }
+          })
+          .fail(function () {
+            $("#contenu-demande").text("Erreur lors du chargement.");
+          });
+
+        $("#btn-retour").click(function () {
+          window.location.href = "accueil_intervenant.html";
+        });
+      });
+    </script>
+  </body>
+</html>

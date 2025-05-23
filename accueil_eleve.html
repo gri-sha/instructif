@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Inscript'IF - Accueil Élève</title>
+    <style>
+      body {
+        padding: 20px;
+        font-family: Arial, sans-serif;
+      }
+      #btn-mon-compte {
+        margin-bottom: 20px;
+        padding: 8px 15px;
+        cursor: pointer;
+      }
+      h1,
+      h2 {
+        margin-bottom: 10px;
+      }
+      .matiere-card {
+        border: 1px solid #ccc;
+        padding: 15px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        user-select: none;
+        border-radius: 5px;
+        transition: background-color 0.3s, border-color 0.3s;
+      }
+      .matiere-card.selected {
+        background-color: #007bff;
+        color: white;
+        border-color: #0056b3;
+      }
+      #btn-continuer {
+        margin-top: 20px;
+        padding: 10px 20px;
+        cursor: pointer;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+      }
+      #btn-continuer:disabled {
+        background-color: #aaa;
+        cursor: not-allowed;
+      }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  </head>
+  <body>
+    <button id="btn-mon-compte">Mon compte</button>
+
+    <h1>Trouvez le professeur parfait !</h1>
+    <h2>Choisissez une matière :</h2>
+    <div id="liste-des-matieres"></div>
+
+    <button id="btn-continuer" disabled>Continuer</button>
+
+    <script>
+      $(document).ready(function () {
+        $("#btn-mon-compte").click(function () {
+          window.location = "compte_eleve.html";
+        });
+
+        let nomMatiereSelectionnee = null;
+
+        // Charger la liste des matières
+        $.ajax({
+          url: "ActionServlet",
+          type: "GET",
+          data: { todo: "lister_matieres" },
+          dataType: "json",
+        })
+          .done(function (response) {
+            let listeMatieres = $("#liste-des-matieres");
+            listeMatieres.empty();
+
+            response.matieres.forEach(function (matiere) {
+              let matiereDiv = $("<div>")
+                .addClass("matiere-card")
+                .text(matiere.nom)
+                .click(function () {
+                  nomMatiereSelectionnee = matiere.nom;
+                  $(".matiere-card").removeClass("selected");
+                  $(this).addClass("selected");
+                  $("#btn-continuer").prop("disabled", false);
+                });
+
+              listeMatieres.append(matiereDiv);
+            });
+          })
+          .fail(function () {
+            alert("Erreur lors du chargement des matières.");
+          });
+
+        $("#btn-continuer").click(function () {
+          if (nomMatiereSelectionnee) {
+            console.log("Matière sélectionnée :", nomMatiereSelectionnee);
+            window.location =
+              "demande_soutien.html?nomMatiere=" +
+              encodeURIComponent(nomMatiereSelectionnee);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Accueil Intervenant - Tableau de bord</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        text-align: center;
+        background-color: #f9f9f9;
+      }
+      #header {
+        position: relative;
+        margin-bottom: 40px;
+        font-weight: bold;
+        font-size: 1.2em;
+        color: #333;
+      }
+      h1 {
+        margin-bottom: 40px;
+        font-size: 2.2em;
+        color: #333;
+      }
+      .big-button {
+        display: block;
+        width: 250px;
+        margin: 20px auto;
+        padding: 25px 0;
+        font-size: 1.3em;
+        font-weight: bold;
+        color: white;
+        background-color: #28a745;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s;
+        user-select: none;
+        text-decoration: none;
+      }
+      .big-button:hover {
+        background-color: #1e7e34;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="header">Mon compte</div>
+
+    <h1>Tableau de bord</h1>
+
+    <button id="btn-demande-en-cours" class="big-button">
+      Demande en cours
+    </button>
+    <button id="btn-historique" class="big-button">
+      Historique des soutiens
+    </button>
+    <button id="btn-statistiques" class="big-button">Statistiques</button>
+
+    <script>
+      document
+        .getElementById("btn-demande-en-cours")
+        .addEventListener("click", function () {
+          window.location.href = "demande_en_cours.html";
+        });
+      document
+        .getElementById("btn-historique")
+        .addEventListener("click", function () {
+          window.location.href = "historique_soutien_intervenant.html";
+        });
+      document
+        .getElementById("btn-statistiques")
+        .addEventListener("click", function () {
+          window.location.href = "statistiques.html";
+        });
+    </script>
+  </body>
+</html>

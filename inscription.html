@@ -5,144 +5,203 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Inscription</title>
     <style>
-      .hidden {
-        display: none;
-      }
       .section {
         margin-bottom: 15px;
       }
       .required {
         color: red;
       }
-      .error label,
-      .error input {
-        color: red;
+      .error input,
+      .error select {
         border-color: red;
       }
-      input {
-        border: 1px solid #ccc;
+      input,
+      select {
         padding: 5px;
+        border: 1px solid #ccc;
       }
     </style>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   </head>
   <body>
-    <h1>Inscription</h1>
+    <h1>Inscription sur Instruct'IF</h1>
 
-    <div id="step1">
-      <div class="section">
-        <label><span class="required">*</span> E-mail</label><br />
-        <input type="email" required placeholder="Saisissez votre e-mail" />
-      </div>
-      <div class="section">
-        <label><span class="required">*</span> Mot de passe</label><br />
-        <input
-          type="password"
-          required
-          placeholder="Saisissez votre mot de passe"
-          id="mdp"
-        />
-      </div>
-      <div class="section">
-        <label><span class="required">*</span> Confirmation mot de passe</label
-        ><br />
-        <input
-          type="password"
-          required
-          placeholder="Confirmez votre mot de passe"
-          id="conf_mdp"
-        />
-      </div>
-      <button onclick="showNextStep()">Continuer</button>
-    </div>
-
-    <div id="step2" class="hidden">
+    <div id="inscriptionForm">
       <div class="section">
         <label><span class="required">*</span> Prénom</label><br />
-        <input type="text" required placeholder="Votre prénom" />
+        <input type="text" id="prenom" />
       </div>
+
       <div class="section">
         <label><span class="required">*</span> Nom</label><br />
-        <input type="text" required placeholder="Votre nom" />
+        <input type="text" id="nom" />
       </div>
+
       <div class="section">
         <label><span class="required">*</span> Date de naissance</label><br />
-        <input type="date" required />
+        <select id="jour"></select>
+        <select id="mois"></select>
+        <select id="annee"></select>
       </div>
-      <button onclick="showNextStep()">Continuer</button>
-    </div>
 
-    <div id="step3" class="hidden">
       <div class="section">
-        <label><span class="required">*</span> Code Etablissement</label><br />
-        <input type="text" required placeholder="Code établissement" />
+        <label><span class="required">*</span> Code établissement</label><br />
+        <input type="text" id="code_etab" />
       </div>
+
       <div class="section">
         <label><span class="required">*</span> Classe</label><br />
-        <input type="text" required placeholder="Classe" />
+        <select id="classe">
+          <option value="">-- Sélectionner une classe --</option>
+          <option value="1">CP</option>
+          <option value="2">CE1</option>
+          <option value="3">CE2</option>
+          <option value="4">CM1</option>
+          <option value="5">CM2</option>
+          <option value="6">6ème</option>
+          <option value="7">5ème</option>
+          <option value="8">4ème</option>
+          <option value="9">3ème</option>
+          <option value="10">2nde</option>
+          <option value="11">1ère</option>
+          <option value="12">Terminale</option>
+        </select>
       </div>
-      <button onclick="validerInscription()">Valider</button>
+
+      <div class="section">
+        <label><span class="required">*</span> E-mail</label><br />
+        <input type="email" id="email" />
+      </div>
+
+      <div class="section">
+        <label><span class="required">*</span> Mot de passe</label><br />
+        <input type="password" id="mdp" />
+      </div>
+
+      <div class="section">
+        <label><span class="required">*</span> Confirmer le mot de passe</label
+        ><br />
+        <input type="password" id="mdp2" />
+      </div>
+
+      <button onclick="validerInscription()">Valider mon inscription</button>
     </div>
 
     <script>
-      let currentStep = 1;
-
-      function showNextStep() {
-        const stepDiv = document.getElementById(`step${currentStep}`);
-        const inputs = stepDiv.querySelectorAll("input");
-        let allFilled = true;
-
-        inputs.forEach((input) => {
-          const section = input.closest(".section");
-          if (!input.value.trim()) {
-            allFilled = false;
-            section.classList.add("error");
-          } else {
-            section.classList.remove("error");
-          }
-        });
-
-        // check that passwords match
-        if (currentStep === 1) {
-          const mdp = document.getElementById("mdp").value.trim();
-          const confMdp = document.getElementById("conf_mdp").value.trim();
-
-
-          if (mdp !== confMdp) {
-            allFilled = false;
-            confSection.classList.add("error");
-          } else {
-            confSection.classList.remove("error");
-          }
+      // Remplir les listes déroulantes pour la date
+      $(function () {
+        for (let j = 1; j <= 31; j++) {
+          $("#jour").append(`<option value="${j}">${j}</option>`);
         }
-
-        if (allFilled) {
-          stepDiv.classList.add("hidden");
-          currentStep++;
-          document
-            .getElementById(`step${currentStep}`)
-            .classList.remove("hidden");
+        const moisNoms = [
+          "Janvier",
+          "Février",
+          "Mars",
+          "Avril",
+          "Mai",
+          "Juin",
+          "Juillet",
+          "Août",
+          "Septembre",
+          "Octobre",
+          "Novembre",
+          "Décembre",
+        ];
+        for (let m = 1; m <= 12; m++) {
+          $("#mois").append(`<option value="${m}">${moisNoms[m - 1]}</option>`);
         }
-      }
+        const thisYear = new Date().getFullYear();
+        for (let a = thisYear - 3; a >= thisYear - 30; a--) {
+          $("#annee").append(`<option value="${a}">${a}</option>`);
+        }
+      });
 
       function validerInscription() {
-        const stepDiv = document.getElementById(`step${currentStep}`);
-        const inputs = stepDiv.querySelectorAll("input");
-        let allFilled = true;
+        const form = $("#inscriptionForm");
+        form.find(".section").removeClass("error");
 
-        inputs.forEach((input) => {
-          const section = input.closest(".section");
-          if (!input.value.trim()) {
-            allFilled = false;
-            section.classList.add("error");
-          } else {
-            section.classList.remove("error");
-          }
-        });
+        const prenom = $("#prenom").val().trim();
+        const nom = $("#nom").val().trim();
+        const jour = $("#jour").val();
+        const mois = $("#mois").val();
+        const annee = $("#annee").val();
+        const dateNaissance = `${annee}-${mois.padStart(
+          2,
+          "0"
+        )}-${jour.padStart(2, "0")}`;
+        const codeEtab = $("#code_etab").val().trim();
+        const classe = $("#classe").val();
+        const email = $("#email").val().trim();
+        const mdp = $("#mdp").val();
+        const mdp2 = $("#mdp2").val();
 
-        if (allFilled) {
-          // TODO: handle final submission
-          alert("Inscription validée !");
+        let valid = true;
+
+        if (!prenom) {
+          $("#prenom").parent().addClass("error");
+          valid = false;
         }
+        if (!nom) {
+          $("#nom").parent().addClass("error");
+          valid = false;
+        }
+        if (!jour || !mois || !annee) {
+          $("#jour").parent().parent().addClass("error");
+          valid = false;
+        }
+        if (!codeEtab) {
+          $("#code_etab").parent().addClass("error");
+          valid = false;
+        }
+        if (!classe) {
+          $("#classe").parent().addClass("error");
+          valid = false;
+        }
+        if (!email) {
+          $("#email").parent().addClass("error");
+          valid = false;
+        }
+        if (!mdp) {
+          $("#mdp").parent().addClass("error");
+          valid = false;
+        }
+        if (!mdp2 || mdp !== mdp2) {
+          $("#mdp2").parent().addClass("error");
+          valid = false;
+        }
+
+        if (!valid) return;
+
+        // Envoi des données à ActionServlet
+        $.ajax({
+          url: "ActionServlet",
+          type: "POST",
+          data: {
+            todo: "inscription_eleve",
+            prenom: prenom,
+            nom: nom,
+            date_naissance: dateNaissance,
+            code_etab: codeEtab,
+            classe: classe,
+            email: email,
+            mdp: mdp,
+          },
+          dataType: "json",
+        })
+          .done(function (response) {
+            if (response.success) {
+              alert("Inscription réussie !");
+            } else {
+              alert("Erreur lors de l'inscription.");
+            }
+
+            setTimeout(function () {
+              window.location = "index.html";
+            }, 500);
+          })
+          .fail(function () {
+            alert("Erreur serveur.");
+          });
       }
     </script>
   </body>
