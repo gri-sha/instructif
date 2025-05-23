@@ -58,8 +58,9 @@
   <body>
     <h1>Demande en cours</h1>
     <div id="contenu-demande">Chargement en cours...</div>
-
-    <button id="btn-retour">Retour à l'accueil</button>
+    <button id="btn-retour" onclick="retourAccueil()">
+      Retour à l'accueil
+    </button>
 
     <script>
       $(document).ready(function () {
@@ -85,46 +86,25 @@
               const classe = eleve.classe || "";
               const etablissement = eleve.etablissement || "";
 
-              const html = `
-            <div class="soutien-info">
-              <div class="section-titre">Matière :</div>
-              ${matiere}
-              <div class="section-titre">Description :</div>
-              ${description}
-              <div class="section-titre">Profil Élève :</div>
-              <div class="profil-eleve">
-                Nom : ${nom}<br>
-                Prénom : ${prenom}<br>
-                Classe : ${classe}<br>
-                Établissement : ${etablissement}
-              </div>
-              <div class="section-titre">Lien de la réunion :</div>
-              <div>${lien}</div>
-              <button id="btn-valider">Valider la demande</button>
-            </div>
-          `;
-
+              const html = ```
+<div class="soutien-info">
+<div class="section-titre">Matière :</div>
+${matiere}
+<div class="section-titre">Description :</div>
+${description}
+<div class="section-titre">Profil Élève :</div>
+<div class="profil-eleve">
+  Nom : ${nom}<br>
+  Prénom : ${prenom}<br>
+  Classe : ${classe}<br>
+  Établissement : ${etablissement}
+</div>
+<div class="section-titre">Lien de la réunion :</div>
+<div>${lien}</div>
+<button id="btn-valider" onclick="validerDemande">Valider la demande</button>
+</div>
+              ```;
               container.append(html);
-
-              $("#btn-valider").click(function () {
-                $.ajax({
-                  url: "ActionServlet",
-                  type: "POST",
-                  data: { todo: "valider_demande" },
-                  dataType: "json",
-                })
-                  .done(function (res) {
-                    if (res.status === "ok") {
-                      alert("Demande validée !");
-                      window.location.href = "bilan_soutien.html";
-                    } else {
-                      alert("Erreur lors de la validation.");
-                    }
-                  })
-                  .fail(function () {
-                    alert("Erreur serveur.");
-                  });
-              });
             } else {
               container.text("Aucune demande en cours.");
             }
@@ -132,11 +112,32 @@
           .fail(function () {
             $("#contenu-demande").text("Erreur lors du chargement.");
           });
-
-        $("#btn-retour").click(function () {
-          window.location.href = "accueil_intervenant.html";
-        });
       });
+
+      function validerDemande() {
+        $.ajax({
+          url: "ActionServlet",
+          type: "POST",
+          data: { todo: "valider_demande" },
+          dataType: "json",
+        })
+          .done(function (res) {
+            if (res.status === "ok") {
+              alert("Demande validée !");
+              window.location.href = "bilan_soutien.html";
+            } else {
+              alert("Erreur lors de la validation.");
+            }
+          })
+          .fail(function () {
+            alert("Erreur serveur.");
+          });
+      }
+
+      function retourAccueil() {
+        concole.log("retour à l'accueil")
+        window.location.href = "accueil_intervenant.html";
+      }
     </script>
   </body>
 </html>

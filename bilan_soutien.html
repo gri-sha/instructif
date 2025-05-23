@@ -1,16 +1,58 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
   <head>
-    <title>TODO supply a title</title>
+    <title>Bilan du soutien</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
+  <style>
+    .section {
+      margin-bottom: 15px;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      border: 1px solid #ccc;
+      padding: 5px;
+      resize: vertical;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 10px;
+      padding: 8px 15px;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <body>
-    <div>TODO write content</div>
+    <h1>Bilan du soutien</h1>
+    <div class="section">
+      <textarea id="bilan" placeholder="Rédigez votre bilan"></textarea>
+    </div>
+    <button onclick="validerBilan()">Valider</button>
+    <script>
+      function validerBilan() {
+        $.ajax({
+          url: "ActionServlet",
+          type: "POST",
+          data: { todo: "terminer_le_soutien", text: document.getElementById("bilan").value.trim() },
+          dataType: "json",
+        })
+          .done(function (res) {
+            if (res.status === "ok") {
+              alert("Demande validée !");
+              window.location.href = "accueil_intervenant.html";
+            } else {
+              alert("Erreur lors de la validation.");
+            }
+          })
+          .fail(function () {
+            alert("Erreur serveur.");
+          });
+      }
+    </script>
   </body>
 </html>
